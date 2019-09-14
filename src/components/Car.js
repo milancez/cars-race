@@ -16,7 +16,7 @@ class Car extends Component {
         <div className='car_box'>
           <div className='car_name'>{ car.name }</div>
           <div className='img_box'>
-            <img src={car.image} />
+            <img src={car.image} alt={car.name} />
           </div>
           <div className='img_overlay'></div>
         </div>

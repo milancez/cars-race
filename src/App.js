@@ -87,7 +87,7 @@ class App extends Component {
         <div className='container'>
           <div className="filter_box">
             <input type="text" placeholder="Filter cars" onChange={this.handleFilterChange} />
-            <button onClick={() => this.filterCars(this.state.filter)}></button>
+            <button onClick={() => this.filterCars(this.state.filter)}><i className="fas fa-search"></i></button>
           </div>
           <div className='cars_list'>
             {

@@ -261,6 +261,12 @@ class App extends Component {
 
               </div>
             </div>
+
+            <div className='start_row'>
+              <input type='number' placeholder='Animation speed' required />
+              <button>Start</button>
+            </div>
+
           </div> 
         </div>
       </div>

@@ -321,3 +321,40 @@
 .light_color_disable {
   opacity: 0.3
 }
+
+.start_row {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-top: 100px;
+}
+
+.start_row input {
+  margin-right: 10px;
+  height: 35px;
+  width: 130px;
+  border-radius: 7px;
+  padding-left: 10px;
+  border: 2px solid #f7941d;
+}
+
+.start_row button {
+  height: 35px;
+  width: 130px;
+  border-radius: 7px;
+  border: 2px solid #fff;
+  cursor: pointer;
+  font-size: 16px;
+  color: #fff;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: #008F11;
+}
+
+.start_row button:hover {
+  background: #00FF41;
+}
+
+.start_row button:focus {
+  outline: 0;
+}

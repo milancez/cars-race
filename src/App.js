@@ -16,8 +16,9 @@ class App extends Component {
     this.state = {
       cars: [],
       filter: '',
-      raceCatDimension: '',
-      raceCarRowHeight: ''
+      raceCarDimension: '',
+      raceCarRowHeight: '',
+      distanceParts: []
     }
 
   }
@@ -25,12 +26,15 @@ class App extends Component {
   componentWillMount() {
     this.getData().then(res => {
 
-      // akcija koja smesta podatke u reducer
+      // Akcija koja smesta podatke u reducer
       this.props.setData(res.data);
       this.props.setCars(res.data.cars);
+
+      this.calculateDistanceParts(res.data.distance);
+
       this.setState({
         cars: res.data.cars
-      })
+      });
     });
   }
 
@@ -96,16 +100,39 @@ class App extends Component {
     let raceCarRowHeight = 0.1 * el.offsetWidth;
 
     //Dimenzije vozila na traci, 10% sirine cele trake - 20px
-    let raceCatDimension = 0.1 * el.offsetWidth - 20;
+    let raceCarDimension = 0.1 * el.offsetWidth - 20;
 
     this.setState({
-      raceCatDimension,
+      raceCarDimension,
       raceCarRowHeight
     })
   }
 
+  drowRaceCarColumns = index => {    
+    return (
+      <React.Fragment>
+        <div className={'race_car_col' + (index === 10 ? ' last_col' : '')}></div>
+        { index < 10 ? this.drowRaceCarColumns(index + 1) : "" }
+      </React.Fragment>
+    )
+  }
+
+  // Racunanje dela trase i kreiranje niza za prikaz distance na tom delu trase
+  calculateDistanceParts = distance => {
+    let distancePart = distance / 10;
+    let distanceParts = [];
+
+    for (let i = 1; i <= 9; i++) {
+      distanceParts.push(i * distancePart);
+    }
+
+    this.setState({
+      distanceParts
+    })
+  }
+
   render() {
-    let { cars } = this.state;
+    let { cars, distanceParts } = this.state;
     let { raceCars } = this.props;
 
     console.log('Race cars: ', raceCars);
@@ -122,23 +149,33 @@ class App extends Component {
               cars.length > 0 ? this.drowCarsList(0, 3) : ''
             }
           </div>
-          <div className={'race_track' + (raceCars.length === 0 ? ' hide_box' : '')}>
-            {
-              raceCars.map((car, index) => (
-                <div key={index} className='race_car_row' style={{height: this.state.raceCarRowHeight}}>
-                  <div 
-                    className='race_car' 
-                    style={{
-                      width: this.state.raceCatDimension,
-                      height: this.state.raceCatDimension,
-                      backgroundImage: `url(${car.image})`
-                    }}
-                  >
+          <div className='race_track_wrap'>
+            <div className={'race_track_header' + (raceCars.length === 0 ? ' hide' : '')}>
+              {
+                distanceParts.map(distance => (
+                  <div className='race_track_distance_part' key={distance}><span>{distance}</span></div>
+                ))
+              }
+            </div>
+            <div className={'race_track' + (raceCars.length === 0 ? ' hide_box' : '')}>
+              {
+                raceCars.map((car, index) => (
+                  <div key={index} className={'race_car_row' + (raceCars.length - 1 === index ? ' last_row' : '')} style={{height: this.state.raceCarRowHeight}}>
+                    { this.drowRaceCarColumns(1) }
+                    <div 
+                      className='race_car' 
+                      style={{
+                        width: this.state.raceCarDimension,
+                        height: this.state.raceCarDimension,
+                        backgroundImage: `url(${car.image})`
+                      }}
+                    >
+                    </div>
                   </div>
-                </div>
-              ))
-            }
-          </div>
+                ))
+              }
+            </div>
+          </div> 
         </div>
       </div>
     );

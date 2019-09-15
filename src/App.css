@@ -176,14 +176,38 @@
   color: #fff
 }
 
+.race_track_wrap {
+  margin-top: 30px;
+}
+
+.race_track_header {
+  display: flex;
+}
+
+.race_track_header.hide {
+  display: none;
+}
+
+.race_track_distance_part {
+  flex-basis: 10%;
+  position: relative;
+  height: 20px;
+}
+
+.race_track_distance_part span {
+  position: absolute;
+  top: 0;
+  right: -5px;
+  color: #fff;
+}
+
 .race_track {
-  margin-top: 20px;
+  margin-top: 10px;
   display: flex;
   flex-direction: column;
   border: 2px solid #fff;
   border-radius: 7px;
 }
-
 .race_track.hide_box {
   border: 0;
 }
@@ -195,8 +219,18 @@
   border-bottom: 2px solid #fff;
 }
 
-.race_car_row:last-child {
+.race_car_row.last_row {
   border-bottom: 0;
+}
+
+.race_car_col {
+  flex-basis: 10%;
+  height: 100%;
+  border-right: 1px solid #bbb;
+}
+
+.race_car_col.last_col {
+  border-right: 0;
 }
 
 .race_car {

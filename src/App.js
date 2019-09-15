@@ -18,7 +18,9 @@ class App extends Component {
       filter: '',
       raceCarDimension: '',
       raceCarRowHeight: '',
-      distanceParts: []
+      distanceParts: [],
+      speedLimits: [],
+      traficLights: []
     }
 
   }
@@ -31,6 +33,8 @@ class App extends Component {
       this.props.setCars(res.data.cars);
 
       this.calculateDistanceParts(res.data.distance);
+      this.generateSpeedLimits(res.data.speed_limits);
+      this.generateTraficLights(res.data.traffic_lights);
 
       this.setState({
         cars: res.data.cars
@@ -131,8 +135,37 @@ class App extends Component {
     })
   }
 
+  // Generisanje niza objekta znakova sa pozicijama konvertovanim u procentima
+  generateSpeedLimits = speedLimits => {
+    speedLimits.map(c => {
+      c.position = this.convertKilometerToPercent(c.position)
+    });
+
+    this.setState({
+      speedLimits
+    });
+  }
+
+  // Generisanje niza objekta semafora sa pozicijama konvertovanim u procentima
+  generateTraficLights = traficLights => {
+    traficLights.map(c => {
+      c.position = this.convertKilometerToPercent(c.position)
+    });
+
+    this.setState({
+      traficLights
+    });
+  }
+
+  // Konvertovanje u procente pocizije koja je dobijena u kilometrima iz JSON fajla
+  convertKilometerToPercent = km => {
+    let { distance } = this.props.data; // Ukupna distanca dobijena iz JSON fajla
+
+    return 100 * km / distance;
+  }
+
   render() {
-    let { cars, distanceParts } = this.state;
+    let { cars, distanceParts, speedLimits, traficLights } = this.state;
     let { raceCars } = this.props;
 
     console.log('Race cars: ', raceCars);
@@ -174,6 +207,35 @@ class App extends Component {
                   </div>
                 ))
               }
+              <div className={'limits_row' + (raceCars.length === 0 ? ' hide' : '')}>
+
+                {
+                  speedLimits.map((item, i) => (
+                    <div key={i} className='limit_speed_col' style={{ left: `${item.position}%` }}>
+                      <div className='dash_line'>
+                        <div className='limit_speed'>
+                          { item.speed }
+                        </div>
+                      </div>                      
+                    </div>
+                  ))                  
+                }
+
+                {
+                  traficLights.map((item, i) => (
+                    <div key={i} className='limit_speed_col' style={{ left: `${item.position}%` }}>
+                      <div className='dash_line'>
+                        <div className='traffic_lights'>
+                          <div className='light_color red'></div>
+                          <div className='light_color green'></div>
+                        </div>
+                      </div>
+                      
+                    </div>
+                  ))
+                }
+
+              </div>
             </div>
           </div> 
         </div>

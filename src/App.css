@@ -178,6 +178,7 @@
 
 .race_track_wrap {
   margin-top: 30px;
+  padding-bottom: 100px;
 }
 
 .race_track_header {
@@ -207,6 +208,7 @@
   flex-direction: column;
   border: 2px solid #fff;
   border-radius: 7px;
+  position: relative;
 }
 .race_track.hide_box {
   border: 0;
@@ -243,4 +245,75 @@
   border: 2px solid #76a21e;
   border-radius: 10px;
   background-color: #aaa;
+}
+
+.limits_row {
+  display: flex;
+}
+
+.limits_row.hide {
+  display: none;
+}
+
+.limit_speed_col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  top: -10px;
+  bottom: -15px;
+  position: absolute;
+}
+
+.dash_line {
+  border-left: 2px dashed #222;
+  height: 100%;
+  position: relative;
+}
+
+.limit_speed {
+  position: absolute;
+  bottom: -55px;
+  right: -25px;
+  width: 50px;  
+  height: 50px;
+  border: 3px solid #f7941d;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  font-size: 22px;
+  align-items: center;
+  background: #fff;
+}
+
+.traffic_lights {
+  position: absolute;
+  bottom: -60px;
+  right: -15px;
+  width: 30px;  
+  height: 55px;
+  border: 1px solid #f7941d;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 22px;
+  align-items: center;
+  background: #fff;
+}
+
+.light_color {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  margin: 3px 0;
+
+}
+
+.light_color.red {
+  background: #f00;
+}
+
+.light_color.green {
+  background: #0f0;
 }

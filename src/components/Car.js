@@ -31,6 +31,7 @@ class Car extends Component {
 
     this.props.forceAppUpdate();
     this.forceUpdate();
+
   }
 
   unSelectCar = () => {

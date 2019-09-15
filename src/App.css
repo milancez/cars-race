@@ -176,3 +176,37 @@
   color: #fff
 }
 
+.race_track {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid #fff;
+  border-radius: 7px;
+}
+
+.race_track.hide_box {
+  border: 0;
+}
+
+.race_car_row {
+  display: flex;
+  width: 100%;
+  position: relative;
+  border-bottom: 2px solid #fff;
+}
+
+.race_car_row:last-child {
+  border-bottom: 0;
+}
+
+.race_car {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 2px solid #76a21e;
+  border-radius: 10px;
+  background-color: #aaa;
+}

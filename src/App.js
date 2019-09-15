@@ -15,7 +15,9 @@ class App extends Component {
 
     this.state = {
       cars: [],
-      filter: ""
+      filter: '',
+      raceCatDimension: '',
+      raceCarRowHeight: ''
     }
 
   }
@@ -30,6 +32,10 @@ class App extends Component {
         cars: res.data.cars
       })
     });
+  }
+
+  componentDidMount() {
+    this.calculateRaceCarDimension();
   }
 
   forceAppUpdate = () => {
@@ -83,6 +89,21 @@ class App extends Component {
     )
   }
 
+  calculateRaceCarDimension = () => {
+    let el = document.querySelector('.race_track');
+
+    // Visina trake jednog vozila, visina jednog reda na traci
+    let raceCarRowHeight = 0.1 * el.offsetWidth;
+
+    //Dimenzije vozila na traci, 10% sirine cele trake - 20px
+    let raceCatDimension = 0.1 * el.offsetWidth - 20;
+
+    this.setState({
+      raceCatDimension,
+      raceCarRowHeight
+    })
+  }
+
   render() {
     let { cars } = this.state;
     let { raceCars } = this.props;
@@ -99,6 +120,23 @@ class App extends Component {
           <div className='cars_list'>
             {
               cars.length > 0 ? this.drowCarsList(0, 3) : ''
+            }
+          </div>
+          <div className={'race_track' + (raceCars.length === 0 ? ' hide_box' : '')}>
+            {
+              raceCars.map((car, index) => (
+                <div key={index} className='race_car_row' style={{height: this.state.raceCarRowHeight}}>
+                  <div 
+                    className='race_car' 
+                    style={{
+                      width: this.state.raceCatDimension,
+                      height: this.state.raceCatDimension,
+                      backgroundImage: `url(${car.image})`
+                    }}
+                  >
+                  </div>
+                </div>
+              ))
             }
           </div>
         </div>

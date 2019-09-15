@@ -68,7 +68,52 @@
   border-radius: 7px;
   cursor: pointer;
   background: #71c7ec;
+  transition: 1.4s all linear;
 }
+
+.car .car_box:hover {
+  transform: rotateX(180deg);
+}
+
+.car .car_box.selected {
+  border-color: #f7941d;
+}
+
+.car .car_box:hover .car_name {
+  color: transparent;
+  background: transparent;
+}
+
+.car .car_box .img_overlay {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,0);
+  left: 0;
+  top: 0;
+  right: 0;
+  color: transparent;
+  bottom: 0;
+  transition: 2s all linear;
+  transform: rotateX(-180deg);
+  border-radius: 5px;
+}
+
+.car .car_box .img_overlay:hover {
+  background: rgba(0,0,0,0.7);
+  color: #fff;
+}
+
+.car .car_box .img_overlay:hover .car_description,
+.car .car_box .img_overlay:hover .car_speed {
+}
+
+.car .car_box .img_overlay:hover .car_description,
+.car .car_box .img_overlay:hover .car_speed {
+  
+} 
 
 .car .car_box .car_name {
   position: absolute;
@@ -80,6 +125,7 @@
   color: #fff;
   font-size: 16px;
   border-radius: 5px 5px 0 0;
+  transition: 1s all linear;
 }
 
 .car .car_box .img_box {
@@ -129,3 +175,4 @@
   font-size: 18px;
   color: #fff
 }
+

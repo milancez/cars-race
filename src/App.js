@@ -32,6 +32,10 @@ class App extends Component {
     });
   }
 
+  forceAppUpdate = () => {
+    this.forceUpdate();
+  }
+
   // Funckija sa axios pozivom ka data.json fajlu
   getData = () => {
     return axios.get(DATA_URL);
@@ -69,7 +73,7 @@ class App extends Component {
         <div className='car_row'>
           {
             cars.slice(start, end).map((car, index) => (
-              <Car key={index} car={car} />
+              <Car key={index} car={car} forceAppUpdate={this.forceAppUpdate} />
             ))
             
           }
@@ -81,20 +85,22 @@ class App extends Component {
 
   render() {
     let { cars } = this.state;
+    let { raceCars } = this.props;
+
+    console.log('Race cars: ', raceCars);
 
     return (
       <div className='app'>
         <div className='container'>
-          <div className="filter_box">
-            <input type="text" placeholder="Filter cars" onChange={this.handleFilterChange} />
-            <button onClick={() => this.filterCars(this.state.filter)}><i className="fas fa-search"></i></button>
+          <div className='filter_box'>
+            <input type='text' placeholder='Filter cars' onChange={this.handleFilterChange} />
+            <button onClick={() => this.filterCars(this.state.filter)}><i className='fas fa-search'></i></button>
           </div>
           <div className='cars_list'>
             {
-              cars.length > 0 ? this.drowCarsList(0, 3) : ""
+              cars.length > 0 ? this.drowCarsList(0, 3) : ''
             }
           </div>
-          
         </div>
       </div>
     );
@@ -104,7 +110,8 @@ class App extends Component {
 function mapStateToProps(state) {
   return {
     data: state.getData,
-    cars: state.getCars
+    cars: state.getCars,
+    raceCars: state.getRaceCars
   }
 }
 

@@ -20,7 +20,8 @@ class App extends Component {
       raceCarRowHeight: '',
       distanceParts: [],
       speedLimits: [],
-      traficLights: []
+      traficLights: [],
+      redLights: []
     }
 
   }
@@ -148,13 +149,34 @@ class App extends Component {
 
   // Generisanje niza objekta semafora sa pozicijama konvertovanim u procentima
   generateTraficLights = traficLights => {
-    traficLights.map(c => {
-      c.position = this.convertKilometerToPercent(c.position)
+    let redLights = [];
+    traficLights.map((c, index) => {
+      c.position = this.convertKilometerToPercent(c.position);
+
+      // Inicijalizuje se status crvenog svetla za mapirani semafor
+      redLights.push(false);
+
+      // Poziv funkciji koja setuje interval promene svetla na semaforu
+      this.setTraficLightInterval(index, c.duration)
     });
 
     this.setState({
-      traficLights
+      traficLights,
+      redLights
     });
+  }
+
+  // Setuje se interval promene statusa crvenog svetla za odredjeni semafor, semafor za prosledjenim indeksom i
+  setTraficLightInterval = (i, duration) => {
+    let { redLights } = this.state;
+    setInterval(() => {
+      redLights[i] = redLights[i] !== null && redLights[i] !== undefined && redLights[i] !== '' ? !redLights[i] : false;
+      
+      this.setState({
+        redLights
+      });
+
+    }, duration)
   }
 
   // Konvertovanje u procente pocizije koja je dobijena u kilometrima iz JSON fajla
@@ -164,8 +186,10 @@ class App extends Component {
     return 100 * km / distance;
   }
 
+
+
   render() {
-    let { cars, distanceParts, speedLimits, traficLights } = this.state;
+    let { cars, distanceParts, speedLimits, traficLights, redLights } = this.state;
     let { raceCars } = this.props;
 
     console.log('Race cars: ', raceCars);
@@ -226,8 +250,8 @@ class App extends Component {
                     <div key={i} className='limit_speed_col' style={{ left: `${item.position}%` }}>
                       <div className='dash_line'>
                         <div className='traffic_lights'>
-                          <div className='light_color red'></div>
-                          <div className='light_color green'></div>
+                          <div className={'light_color red' + (!redLights[i] ? ' light_color_disable' : '')}></div>
+                          <div className={'light_color green' + (redLights[i] ? ' light_color_disable' : '')}></div>
                         </div>
                       </div>
                       

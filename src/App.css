@@ -317,3 +317,7 @@
 .light_color.green {
   background: #0f0;
 }
+
+.light_color_disable {
+  opacity: 0.3
+}

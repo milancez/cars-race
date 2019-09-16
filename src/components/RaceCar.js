@@ -5,14 +5,16 @@ class RaceCar extends Component {
     super(props);
 
     this.state = {
-      raceCarPositionLeft: 0
+      raceCarPositionLeft: 0,
+      end: false,
+      medal: ''
     }
 
     this.raceCarInterval = null;
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if ( this.props.start !== prevProps.start ) {
+    if ( this.props.start !== prevProps.start && this.props.start ) {
       this.start();
     }
   }
@@ -21,12 +23,18 @@ class RaceCar extends Component {
   start = () => {
     let { car } = this.props;
 
+    this.setState({
+      raceCarPositionLeft: 0,
+      end: false
+    })
+
     // Ukupno milisekundi za celu trasu od 100%
     let durationMiliSeconds = this.getDuration(car.speed);
 
     // Procenat trase koji vozilo predje za jednu milisekundu
     let progressPercentPerMiliseconds = 100 / durationMiliSeconds;
 
+    // Setovanje intervala u okviru kojeg se svake milisekunde odvija odredjeni progres ka cilju
     this.raceInterval(progressPercentPerMiliseconds);
 
   }
@@ -41,6 +49,7 @@ class RaceCar extends Component {
     return durationMiliSeconds;
   }
 
+  // Setovanje intervala u okviru kojeg se svake milisekunde odvija odredjeni progres ka cilju
   raceInterval = progressPercentPerMiliseconds => {
     let progress = progressPercentPerMiliseconds * this.props.animationSpeed;
 
@@ -48,10 +57,14 @@ class RaceCar extends Component {
       let { raceCarPositionLeft } = this.state;
       
       if ( raceCarPositionLeft + progress >= 90 ) {
+          let medal = this.getMedal();
           this.setState({
-            raceCarPositionLeft: 90
+            raceCarPositionLeft: 90,
+            end: true,
+            medal
           });
           clearInterval(this.raceCarInterval);
+          this.isLast(medal);
       } else {
           this.setState({
             raceCarPositionLeft: raceCarPositionLeft + progress
@@ -60,6 +73,34 @@ class RaceCar extends Component {
 
     }, 1);
     
+  }
+
+  isLast = medal => {
+    if ( medal === 'bronze' ) {
+      this.props.end();
+    }
+  }
+
+  getMedal = () => {
+    let { order } = this.props;
+    let medal = '';
+
+    switch ( order ) {
+      case 1:
+        medal = 'gold';
+        break;
+      case 2:
+        medal = 'silver';
+        break;
+      case 3:
+        medal = 'bronze';
+        break;
+      default:
+        break;
+    }
+
+    this.props.changeOrder(order + 1);
+    return medal;
   }
 
   // Prikaz jednog od 10 dela trase
@@ -74,7 +115,7 @@ class RaceCar extends Component {
 
   render() { 
     let { index, car, raceCars, raceCarRowHeight, raceCarDimension } = this.props;
-    let { raceCarPositionLeft } = this.state;
+    let { raceCarPositionLeft, end, medal } = this.state;
 
     return ( 
       <React.Fragment>
@@ -89,7 +130,7 @@ class RaceCar extends Component {
             }}
           >
             <div 
-              className={'race_car'}
+              className={'race_car' + (end ? ` ${medal}` : '')}
               style={{
                 width: raceCarDimension,
                 height: raceCarDimension,

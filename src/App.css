@@ -246,9 +246,6 @@
 }
 
 .race_car {
-  /* position: absolute;
-  top: 10px;
-  left: 10px; */
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
@@ -257,8 +254,19 @@
   background-color: #71c7ec;
 }
 
-.race_car.started {
-  left: calc(90% + 10px);
+.race_car.gold {
+  background-color: gold;
+  /* border-color: #000 */
+}
+
+.race_car.silver {
+  background-color: silver;
+  /* border-color: #000 */
+}
+
+.race_car.bronze {
+  background-color: #cd7f32;
+  /* border-color: #000 */
 }
 
 .limits_row {
@@ -341,6 +349,10 @@
   justify-content: flex-end;
   width: 100%;
   margin-top: 100px;
+}
+
+.start_row.hide {
+  display: none;
 }
 
 .start_row input {

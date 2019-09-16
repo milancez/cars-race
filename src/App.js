@@ -25,9 +25,7 @@ class App extends Component {
       redLights: [],
       start: false,
       animationSpeed: 0,
-      raceCarPositionLeft1: 0,
-      raceCarPositionLeft2: 0,
-      raceCarPositionLeft3: 0
+      order: 1
     }
     
 
@@ -40,6 +38,13 @@ class App extends Component {
 
   forceAppUpdate = () => {
     this.forceUpdate();
+  }
+
+  // Promena trenutno slobodne medalje
+  changeOrder = order => {
+    this.setState({
+      order
+    })
   }
 
   // Funckija sa axios pozivom ka data.json fajlu
@@ -199,6 +204,13 @@ class App extends Component {
     });
   }
 
+  end = () => {
+    this.setState({
+      start: false,
+      order: 1
+    });
+  }
+
   // Setovanje brzine animacije. Ukoliko je brzina 1, vreme koje je potrebno da se slika automobila premesti sa pocetka na kraj
   // bice ekvivalentno vremenu koje je potrebno da vozilo predje tu razdaljinu u realnom svetu
   changeAnimationSpeed = e => {
@@ -246,6 +258,9 @@ class App extends Component {
                     animationSpeed={this.state.animationSpeed}
                     distance={this.props.data.distance}
                     start={this.state.start}
+                    order={this.state.order}
+                    changeOrder={this.changeOrder}
+                    end={this.end}
                   />
                 ))
               }
@@ -281,7 +296,7 @@ class App extends Component {
               </div>
             </div>
 
-            <div className='start_row'>
+            <div className={'start_row' + (raceCars.length < 3 ? ' hide' : '')}>
               <input type='number' placeholder='Animation speed' onChange={this.changeAnimationSpeed} required />
               <button onClick={this.state.animationSpeed > 0 && raceCars.length === 3 ? this.start : null}>Start</button>
             </div>

@@ -235,16 +235,30 @@
   border-right: 0;
 }
 
-.race_car {
+.race_car_box {
   position: absolute;
+  top: 0;
+  left: 0;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.race_car {
+  /* position: absolute;
   top: 10px;
-  left: 10px;
+  left: 10px; */
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
   border: 2px solid #76a21e;
   border-radius: 10px;
   background-color: #71c7ec;
+}
+
+.race_car.started {
+  left: calc(90% + 10px);
 }
 
 .limits_row {

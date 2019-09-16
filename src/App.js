@@ -7,6 +7,7 @@ import {
   setCars
 } from './actions';
 import Car from './components/Car';
+import RaceCar from './components/RaceCar';
 const DATA_URL = './data.json';
 
 class App extends Component {
@@ -21,13 +22,29 @@ class App extends Component {
       distanceParts: [],
       speedLimits: [],
       traficLights: [],
-      redLights: []
+      redLights: [],
+      start: false,
+      animationSpeed: 0,
+      raceCarPositionLeft1: 0,
+      raceCarPositionLeft2: 0,
+      raceCarPositionLeft3: 0
     }
+    
 
   }
 
-  componentWillMount() {
-    this.getData().then(res => {
+  componentDidMount() {
+    this.getData();
+    this.calculateRaceCarDimension();
+  }
+
+  forceAppUpdate = () => {
+    this.forceUpdate();
+  }
+
+  // Funckija sa axios pozivom ka data.json fajlu
+  getData = () => {
+    axios.get(DATA_URL).then(res => {
 
       // Akcija koja smesta podatke u reducer
       this.props.setData(res.data);
@@ -41,19 +58,6 @@ class App extends Component {
         cars: res.data.cars
       });
     });
-  }
-
-  componentDidMount() {
-    this.calculateRaceCarDimension();
-  }
-
-  forceAppUpdate = () => {
-    this.forceUpdate();
-  }
-
-  // Funckija sa axios pozivom ka data.json fajlu
-  getData = () => {
-    return axios.get(DATA_URL);
   }
 
   // Filtriranje automobila na osnovu unesenog niza karaktera u input polje
@@ -139,7 +143,7 @@ class App extends Component {
   // Generisanje niza objekta znakova sa pozicijama konvertovanim u procentima
   generateSpeedLimits = speedLimits => {
     speedLimits.map(c => {
-      c.position = this.convertKilometerToPercent(c.position)
+      return c.position = this.convertKilometerToPercent(c.position)
     });
 
     this.setState({
@@ -157,7 +161,9 @@ class App extends Component {
       redLights.push(false);
 
       // Poziv funkciji koja setuje interval promene svetla na semaforu
-      this.setTraficLightInterval(index, c.duration)
+      this.setTraficLightInterval(index, c.duration);
+
+      return c;
     });
 
     this.setState({
@@ -186,13 +192,26 @@ class App extends Component {
     return 100 * km / distance;
   }
 
+  // Startovanje premestanja automobila sa pocetka na kraj trase
+  start = () => {
+    this.setState({
+      start: true
+    });
+  }
 
+  // Setovanje brzine animacije. Ukoliko je brzina 1, vreme koje je potrebno da se slika automobila premesti sa pocetka na kraj
+  // bice ekvivalentno vremenu koje je potrebno da vozilo predje tu razdaljinu u realnom svetu
+  changeAnimationSpeed = e => {
+    this.setState({
+      animationSpeed: e.target.value
+    })
+  }
 
   render() {
     let { cars, distanceParts, speedLimits, traficLights, redLights } = this.state;
     let { raceCars } = this.props;
 
-    console.log('Race cars: ', raceCars);
+    //console.log('Race cars: ', raceCars);
 
     return (
       <div className='app'>
@@ -217,20 +236,20 @@ class App extends Component {
             <div className={'race_track' + (raceCars.length === 0 ? ' hide_box' : '')}>
               {
                 raceCars.map((car, index) => (
-                  <div key={index} className={'race_car_row' + (raceCars.length - 1 === index ? ' last_row' : '')} style={{height: this.state.raceCarRowHeight}}>
-                    { this.drowRaceCarColumns(1) }
-                    <div 
-                      className='race_car' 
-                      style={{
-                        width: this.state.raceCarDimension,
-                        height: this.state.raceCarDimension,
-                        backgroundImage: `url(${car.image})`
-                      }}
-                    >
-                    </div>
-                  </div>
+                  <RaceCar 
+                    key={index}
+                    index={index}
+                    car={car}
+                    raceCars={raceCars}
+                    raceCarRowHeight={this.state.raceCarRowHeight}
+                    raceCarDimension={this.state.raceCarDimension}
+                    animationSpeed={this.state.animationSpeed}
+                    distance={this.props.data.distance}
+                    start={this.state.start}
+                  />
                 ))
               }
+              
               <div className={'limits_row' + (raceCars.length === 0 ? ' hide' : '')}>
 
                 {
@@ -263,8 +282,8 @@ class App extends Component {
             </div>
 
             <div className='start_row'>
-              <input type='number' placeholder='Animation speed' required />
-              <button>Start</button>
+              <input type='number' placeholder='Animation speed' onChange={this.changeAnimationSpeed} required />
+              <button onClick={this.state.animationSpeed > 0 && raceCars.length === 3 ? this.start : null}>Start</button>
             </div>
 
           </div> 

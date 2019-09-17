@@ -31,10 +31,10 @@ class RaceCar extends Component {
     // Ukupno milisekundi za celu trasu od 100%
     let durationMiliSeconds = this.getDuration(car.speed);
 
-    // Procenat trase koji vozilo predje za jednu milisekundu
-    let progressPercentPerMiliseconds = 100 / durationMiliSeconds;
+    // Procenat trase koji vozilo predje za 50 milisekundi
+    let progressPercentPerMiliseconds = 100 * 50 / durationMiliSeconds;
 
-    // Setovanje intervala u okviru kojeg se svake milisekunde odvija odredjeni progres ka cilju
+    // Setovanje intervala u okviru kojeg se svakih 50 milisekundi odvija odredjeni progres ka cilju
     this.raceInterval(progressPercentPerMiliseconds);
 
   }
@@ -49,7 +49,7 @@ class RaceCar extends Component {
     return durationMiliSeconds;
   }
 
-  // Setovanje intervala u okviru kojeg se svake milisekunde odvija odredjeni progres ka cilju
+  // Setovanje intervala u okviru kojeg se svakih 50 milisekundi odvija odredjeni progres ka cilju
   raceInterval = progressPercentPerMiliseconds => {
     let progress = progressPercentPerMiliseconds * this.props.animationSpeed;
 
@@ -71,7 +71,7 @@ class RaceCar extends Component {
           });
       }
 
-    }, 1);
+    }, 50);
     
   }
 
